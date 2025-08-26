@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+LEARNING BACKTRACE WEB APP
 
-## Getting Started
+A lot of times when I’m studying a topic in math, I realize I don’t have the requisite knowledge to learn from whatever source I’m using (textbook, MIT notes, video, etc). I try to find a source for that prerequisite thing, but then I get distracted, etc. I want to create a web app that organizes the sources I use, and the questions/topics they answer. 
 
-First, run the development server:
+Essentially it should be a big directed graph, with two kinds of nodes:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Resource Nodes - these should have the following properties (or the underlying objects should, at least):
+- Id
+- Name
+- Resource type (video, pdf, etc) 
+- (optional) topic tag like Topology or Number Theory
+- Link to resource
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Question Nodes - these are questions I have when studying a resource that I realize are fundamental to understanding it. An example might be, “What is a Principal Ideal Domain?” edges flow FROM question nodes TO the resources that require me to know the answer. When I find a new resource that answers the question, I want to draw an arrow FROM that resource TO the question it should (hopefully) answer. If it is a big or complicated question, it may have several resources flowing into it. These should have the following properties:
+- Id 
+- Question
+- (optional) topic tag like Topology or Number Theory
+- Answered Level, ranging from 0 (still no idea) to 1 (I completely understand the answer now)
+- -(optional) note where I can explain what I know or what’s tripping me up in my own words. 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app should have an easy interface for creating/updating new nodes, and directed edges. 
