@@ -32,36 +32,39 @@ export default function QuestionNodeForm({ onSubmit, onCancel, title = "Add Ques
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white border rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold">{title}</h3>
-      
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-6 bg-white/90 dark:bg-gray-900/90 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg text-[var(--foreground)]"
+    >
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+
       <div>
-        <label className="block text-sm font-medium mb-1">Question *</label>
+        <label className="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">Question *</label>
         <textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Enter your question"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
           rows={3}
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Topic Tag</label>
+        <label className="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">Topic Tag</label>
         <input
           type="text"
           value={topicTag}
           onChange={(e) => setTopicTag(e.target.value)}
           placeholder="e.g., Topology, Number Theory"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium mb-1">
-          Answered Level: {answeredLevel.toFixed(2)} 
-          <span className="text-gray-500 ml-1">
+          Answered Level: {answeredLevel.toFixed(2)}
+          <span className="text-gray-500 dark:text-gray-400 ml-1">
             (0 = No idea, 1 = Completely understand)
           </span>
         </label>
@@ -82,12 +85,12 @@ export default function QuestionNodeForm({ onSubmit, onCancel, title = "Add Ques
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Notes</label>
+        <label className="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">Notes</label>
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="Explain what you know or what's tripping you up"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
           rows={4}
         />
       </div>
@@ -102,7 +105,7 @@ export default function QuestionNodeForm({ onSubmit, onCancel, title = "Add Ques
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+          className="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-500"
         >
           Cancel
         </button>
