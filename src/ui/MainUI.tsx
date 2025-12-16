@@ -226,8 +226,9 @@ function FlowEditor() {
             Add Question Node
           </button>
         </div>
-        
-        {showForm === "resource" && (
+        {showForm && (<div className="w-screen h-screen absolute items-center justify-center z-3">
+        <div className="w-1/2 z-3 ml-auto mr-auto">
+          {showForm === "resource" && (
           <ResourceNodeForm
             onSubmit={handleAddResourceNode}
             onCancel={() => {
@@ -249,9 +250,13 @@ function FlowEditor() {
             title={connectedNodeId ? "Add Question (will connect from resource)" : "Add Question Node"}
           />
         )}
+        </div>
+        </div>)}
+        
+        
       </div>
       
-      <div tabIndex={0} onKeyDown={handleKeyDown} className="h-full outline-none">
+      <div tabIndex={0} onKeyDown={handleKeyDown} className="h-full mt-10 outline-none">
         <ReactFlow
           nodes={nodes}
           edges={edges}
