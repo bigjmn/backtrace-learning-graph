@@ -1,17 +1,56 @@
 import React, { useState } from 'react';
-import { ResourceNode } from '@/types';
-
+import { ResourceNode, QuestionNode } from '@/types';
+import { resourceSearch, SourceResult } from '@/api/actions';
 interface ResourceNodeFormProps {
   onSubmit: (node: Omit<ResourceNode, 'id'>) => void;
   onCancel: () => void;
   title?: string;
+  connectedQuestion?: QuestionNode;
 }
 
-export default function ResourceNodeForm({ onSubmit, onCancel, title = "Add Resource Node" }: ResourceNodeFormProps) {
+export default function ResourceNodeForm({ onSubmit, onCancel, title = "Add Resource Node", connectedQuestion }: ResourceNodeFormProps) {
   const [name, setName] = useState('');
   const [resourceType, setResourceType] = useState<ResourceNode['resourceType']>('article');
   const [topicTag, setTopicTag] = useState('');
   const [link, setLink] = useState('');
+  const [searchPending, setSearchPending] = useState(false)
+  const [foundResources, setFoundResources] = useState<SourceResult[]>([])
+
+  const handleFindResource = async () => {
+    if (!connectedQuestion || !connectedQuestion.question) return;
+    try {
+      setSearchPending(true)
+      const resourceRes = await resourceSearch(connectedQuestion.question)
+      if (resourceRes.length === 0){
+        throw Error("no results!")
+        
+  
+      }
+      setFoundResources(resourceRes)
+      // const resourceFound = resourceRes[0]
+      // console.log("found resource!")
+      // console.log(resourceFound)
+      // setLink(resourceFound.url)
+      // if (resourceFound.title){
+      //   setName(resourceFound.title)
+      // }
+    } catch (error) {
+      console.log(error)
+      
+    } finally {
+      setSearchPending(false)
+    }
+    
+
+  }
+  const autoFill = (opid:string) => {
+    const foundresource = foundResources.find(x => x.id === opid)
+    if (!foundresource) return; 
+    if (foundresource.title){
+      setName(foundresource.title)
+    }
+    setLink(foundresource.url)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +73,18 @@ export default function ResourceNodeForm({ onSubmit, onCancel, title = "Add Reso
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white border rounded-lg shadow-md">
       <h3 className="text-lg font-semibold">{title}</h3>
+      
+      {connectedQuestion && (
+        <div className="p-3 bg-pink-50 border border-pink-200 rounded-md">
+          <div className="text-sm font-medium text-pink-800 mb-1">Will connect to question:</div>
+          <div className="text-sm text-pink-700">{connectedQuestion.question}</div>
+          {connectedQuestion.topicTag && (
+            <span className="inline-block mt-1 px-2 py-1 text-xs bg-pink-100 text-pink-800 rounded">
+              {connectedQuestion.topicTag}
+            </span>
+          )}
+        </div>
+      )}
       
       <div>
         <label className="block text-sm font-medium mb-1">Name *</label>
@@ -102,6 +153,20 @@ export default function ResourceNodeForm({ onSubmit, onCancel, title = "Add Reso
         >
           Cancel
         </button>
+        <button
+          type="button"
+          onClick={handleFindResource}
+          className="px-4 py-2 bg-green-800 text-white rounded-md hover:bg-gray-600"
+        >
+          Find Resource
+        </button>
+        {foundResources.length>0 && (
+          <select onChange={(e) => autoFill(e.target.value)} title="resources found" name="autosources">
+            {foundResources.map((fr) => (
+              <option value={fr.id}>{fr.title}</option>
+            ))}
+          </select>
+        )}
       </div>
     </form>
   );

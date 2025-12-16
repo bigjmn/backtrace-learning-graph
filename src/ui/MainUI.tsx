@@ -13,6 +13,7 @@ import ReactFlow, {
   useEdgesState,
   MarkerType,
   useReactFlow,
+  NodeDragHandler,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { v4 as uuidv4 } from "uuid";
@@ -48,9 +49,10 @@ function FlowEditor() {
       
       // Convert AppNodes to ReactFlow nodes
       const reactFlowNodes: Node[] = firebaseNodes.map((appNode) => {
-        // Try to find existing node position, otherwise use random position
+        // Use saved position from Firebase, fallback to existing position, then random position
         const existingNode = nodes.find(n => n.id === appNode.id);
-        const position = existingNode ? existingNode.position : { x: Math.random() * 400, y: Math.random() * 400 };
+        const position = appNode.position || 
+                        (existingNode ? existingNode.position : { x: Math.random() * 400, y: Math.random() * 400 });
         
         return {
           id: appNode.id,
@@ -193,6 +195,18 @@ function FlowEditor() {
     }
   }, [getNodes, handleDeleteNode]);
 
+  const handleNodeDragStop: NodeDragHandler = useCallback(async (_, node) => {
+    // Find the corresponding AppNode and update its position in Firebase
+    const appNode = appNodes.find(n => n.id === node.id);
+    if (appNode) {
+      const updatedNode = { 
+        ...appNode, 
+        position: { x: node.position.x, y: node.position.y } 
+      };
+      await setDoc(doc(db, "nodes", node.id), updatedNode);
+    }
+  }, [appNodes]);
+
   return (
     <div className="h-screen">
       <div className="p-4 bg-gray-100 border-b">
@@ -221,6 +235,7 @@ function FlowEditor() {
               setConnectedNodeId(null);
             }}
             title={connectedNodeId ? "Add Resource (will connect to question)" : "Add Resource Node"}
+            connectedQuestion={connectedNodeId ? appNodes.find(node => node.id === connectedNodeId && node.nodeType === 'question') as QuestionNode : undefined}
           />
         )}
         
@@ -243,6 +258,7 @@ function FlowEditor() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={handleConnect}
+          onNodeDragStop={handleNodeDragStop}
           nodeTypes={nodeTypes}
           defaultEdgeOptions={{
             type: 'default',

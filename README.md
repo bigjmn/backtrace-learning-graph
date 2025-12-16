@@ -1,21 +1,72 @@
-LEARNING BACKTRACE WEB APP
+# Backtrace Learning Graph
 
-A lot of times when I’m studying a topic in math, I realize I don’t have the requisite knowledge to learn from whatever source I’m using (textbook, MIT notes, video, etc). I try to find a source for that prerequisite thing, but then I get distracted, etc. I want to create a web app that organizes the sources I use, and the questions/topics they answer. 
+An interactive learning graph that helps you visualize and track knowledge dependencies. Create nodes for questions and resources, connect them to show relationships, and track your understanding progress.
 
-Essentially it should be a big directed graph, with two kinds of nodes:
+## Features
 
-Resource Nodes - these should have the following properties (or the underlying objects should, at least):
-- Id
-- Name
-- Resource type (video, pdf, etc) 
-- (optional) topic tag like Topology or Number Theory
-- Link to resource
+### Node Types
+- **Question Nodes** (pink) - Represent learning questions or concepts
+  - Track understanding level (0-100%)
+  - Add optional notes and topic tags
+  - Click on understanding level to edit with slider
+- **Resource Nodes** (blue) - Represent learning materials
+  - Support various resource types: video, PDF, book, article, website, other
+  - Include direct links to resources
+  - Add topic tags for organization
 
-Question Nodes - these are questions I have when studying a resource that I realize are fundamental to understanding it. An example might be, “What is a Principal Ideal Domain?” edges flow FROM question nodes TO the resources that require me to know the answer. When I find a new resource that answers the question, I want to draw an arrow FROM that resource TO the question it should (hopefully) answer. If it is a big or complicated question, it may have several resources flowing into it. These should have the following properties:
-- Id 
-- Question
-- (optional) topic tag like Topology or Number Theory
-- Answered Level, ranging from 0 (still no idea) to 1 (I completely understand the answer now)
-- -(optional) note where I can explain what I know or what’s tripping me up in my own words. 
+### Interactive Features
+- **Visual Graph Interface** - Drag and drop nodes to organize your learning map
+- **Auto-save Positions** - Node positions are automatically saved to Firebase
+- **Smart Connections** - Connect resources to questions they answer
+- **Keyboard Shortcuts** - Delete selected nodes with Delete/Backspace keys
+- **Real-time Sync** - Changes are saved to Firebase and sync across sessions
 
-The app should have an easy interface for creating/updating new nodes, and directed edges. 
+### Node Management
+- Create new nodes with dedicated forms
+- Connect nodes directly from node buttons or by dragging
+- Delete nodes (removes node and all connected edges)
+- Update question understanding levels with interactive slider
+- Visual selection with highlighted borders
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 with React 18
+- **UI**: ReactFlow for graph visualization, Tailwind CSS for styling  
+- **Database**: Firebase Firestore for real-time data persistence
+- **Language**: TypeScript for type safety
+
+## Getting Started
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Set up Firebase**:
+   - Create a Firebase project
+   - Enable Firestore
+   - Add your Firebase config to `src/config/firebase.ts`
+
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Open** [http://localhost:3000](http://localhost:3000) in your browser
+
+## Usage
+
+1. **Add Resources**: Click "Add Resource Node" to create learning materials
+2. **Add Questions**: Click "Add Question Node" to create learning objectives  
+3. **Connect Nodes**: Use the + buttons on nodes or drag between connection handles
+4. **Track Progress**: Click on question understanding percentages to update
+5. **Organize**: Drag nodes to arrange your learning map visually
+6. **Manage**: Select nodes and press Delete to remove them
+
+## Data Structure
+
+The app uses two main Firestore collections:
+- `nodes` - Stores question and resource node data with positions
+- `edges` - Stores connections between nodes
+
+Node positions and all changes are automatically persisted to Firebase for seamless experience across sessions.

@@ -5,6 +5,7 @@ export interface ResourceNode {
   topicTag?: string | null;
   link: string;
   nodeType: 'resource';
+  position?: { x: number; y: number };
 }
 
 export interface QuestionNode {
@@ -14,6 +15,7 @@ export interface QuestionNode {
   answeredLevel: number; // 0 to 1
   note?: string|null;
   nodeType: 'question';
+  position?: { x: number; y: number };
 }
 
 export type AppNode = ResourceNode | QuestionNode;
