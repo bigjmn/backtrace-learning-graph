@@ -208,10 +208,10 @@ function FlowEditor() {
   }, [appNodes]);
 
   return (
-    <div className="h-screen">
-      <div className="p-4 bg-gray-100 border-b">
+    <div className="h-screen text-[var(--foreground)] bg-[var(--background)]">
+      <div className="p-4 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="flex gap-2 mb-4">
-          <button 
+          <button
             type="button"
             onClick={() => setShowForm("resource")}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -226,32 +226,34 @@ function FlowEditor() {
             Add Question Node
           </button>
         </div>
-        {showForm && (<div className="w-screen h-screen absolute items-center justify-center z-3">
-        <div className="w-1/2 z-3 ml-auto mr-auto">
-          {showForm === "resource" && (
-          <ResourceNodeForm
-            onSubmit={handleAddResourceNode}
-            onCancel={() => {
-              setShowForm(null);
-              setConnectedNodeId(null);
-            }}
-            title={connectedNodeId ? "Add Resource (will connect to question)" : "Add Resource Node"}
-            connectedQuestion={connectedNodeId ? appNodes.find(node => node.id === connectedNodeId && node.nodeType === 'question') as QuestionNode : undefined}
-          />
+        {showForm && (
+          <div className="fixed inset-0 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 overflow-auto z-30">
+            <div className="w-full max-w-2xl mt-10">
+              {showForm === "resource" && (
+                <ResourceNodeForm
+                  onSubmit={handleAddResourceNode}
+                  onCancel={() => {
+                    setShowForm(null);
+                    setConnectedNodeId(null);
+                  }}
+                  title={connectedNodeId ? "Add Resource (will connect to question)" : "Add Resource Node"}
+                  connectedQuestion={connectedNodeId ? appNodes.find(node => node.id === connectedNodeId && node.nodeType === 'question') as QuestionNode : undefined}
+                />
+              )}
+
+              {showForm === "question" && (
+                <QuestionNodeForm
+                  onSubmit={handleAddQuestionNode}
+                  onCancel={() => {
+                    setShowForm(null);
+                    setConnectedNodeId(null);
+                  }}
+                  title={connectedNodeId ? "Add Question (will connect from resource)" : "Add Question Node"}
+                />
+              )}
+            </div>
+          </div>
         )}
-        
-        {showForm === "question" && (
-          <QuestionNodeForm
-            onSubmit={handleAddQuestionNode}
-            onCancel={() => {
-              setShowForm(null);
-              setConnectedNodeId(null);
-            }}
-            title={connectedNodeId ? "Add Question (will connect from resource)" : "Add Question Node"}
-          />
-        )}
-        </div>
-        </div>)}
         
         
       </div>
